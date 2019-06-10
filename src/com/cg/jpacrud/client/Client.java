@@ -1,41 +1,44 @@
 package com.cg.jpacrud.client;
 
-import com.cg.jpacrud.entities.Student;
-import com.cg.jpacrud.service.StudentService;
-import com.cg.jpacrud.service.StudentServiceImpl;
+import com.cg.jpacrud.entities.Book;
+import com.cg.jpacrud.service.BookService;
+import com.cg.jpacrud.service.BookServiceImpl;
 
 public class Client {
 
 	public static void main(String[] args) {
 
-		//Debug this program as Debug -> Debug as Java Application
+		BookService service = new BookServiceImpl();
+
+		 System.out
+		 .println("************Listing total number of books*************");
+		 System.out.println("Total books:" + service.getBookCount());
 		
-		StudentService service = new StudentServiceImpl();
+		 System.out
+		 .println("************Listing book with id 1001*************");
+		 System.out.println("Boo with ID 106:" + service.getBookById(1001));
 		
-		Student student = new Student();
-		student.setStudentId(100);
-		student.setName("Sachin");
-		service.addStudent(student);
+		 System.out.println("************Listing All books*************");
+		 for (Book book : service.getAllBooks()) {
+		 System.out.println(book);
+		 }
+
+		System.out
+				.println("************Listing book written by Sekhar*************");
+		for (Book book : service.getAuthorBooks("Sekhar")) {
+			System.out.println(book);
+		}
+
+		 System.out.println("************Listing book on id1*************");
 		
-		//at this breakpoint, we have added one record to table
-		student = service.findStudentById(100);
-		System.out.print("ID:"+student.getStudentId());
-		System.out.println(" Name:"+student.getName());
-		
-		student.setName("Sachin Tendulkar");
-		service.updateStudent(student);
-		
-		//at this breakpoint, we have updated record added in first section
-		student = service.findStudentById(100);
-		System.out.print("ID:"+student.getStudentId());
-		System.out.println(" Name:"+student.getName());
-		
-		//at this breakpoint, record is removed from table
-		service.removeStudent(student);
-		System.out.println("End of program...");
-		
+		 System.out.println(service.getBookById(12));
 		
 		
+		 System.out
+		 .println("************Listing All books between 500 and 600*************");
+		 for (Book book : service.getBooksInPriceRange(1000, 5000)) {
+		 System.out.println(book);
+		 }
 
 	}
 }

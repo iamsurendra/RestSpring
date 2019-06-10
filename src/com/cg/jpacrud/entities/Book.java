@@ -1,51 +1,46 @@
 package com.cg.jpacrud.entities;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-
-
 @Entity
-@Table(name="book_master")
+@Table(name = "Book_master")
 @NamedQueries(@NamedQuery(name = "getAllBooks", query = "SELECT book FROM Book book"))
-public class Book {
+public class Book implements Serializable {
+
 	private static final long serialVersionUID = 1L;
 	@Id
-	private int isbn;
-	@Column(name = "book_title")
-	private String title;
-	@Column(name = "book_price")
-	private double  price;
-	
-	@ManyToMany(cascade = CascadeType.ALL)
-	@JoinTable(name = "Book_authors", joinColumns = { @JoinColumn(name = "isbn_code") }, inverseJoinColumns = { @JoinColumn(name = "authors_id") })
-	private Set<Author> authors = new HashSet<>();	//required to avoid NullPointerException
+	private int id;
 
-	public int getIsbn() {
-		return isbn;
+	private String tittle;
+	private double price;
+
+	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "books")
+	private Set<Author> authors = new HashSet<>();
+
+	public int getId() {
+		return id;
 	}
 
-	public void setIsbn(int isbn) {
-		this.isbn = isbn;
+	public void setId(int id) {
+		this.id = id;
 	}
 
-	public String getTitle() {
-		return title;
+	public String getTittle() {
+		return tittle;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public void setTittle(String tittle) {
+		this.tittle = tittle;
 	}
 
 	public double getPrice() {
@@ -61,14 +56,17 @@ public class Book {
 	}
 
 	public void setAuthors(Set<Author> authors) {
-		authors = authors;
+		this.authors = authors;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
 	@Override
 	public String toString() {
-		return "Book [isbn=" + isbn + ", title=" + title + ", price=" + price
+		return "Book [id=" + id + ", tittle=" + tittle + ", price=" + price
 				+ ", authors=" + authors + "]";
 	}
-	
-	
+
 }

@@ -1,72 +1,68 @@
 package com.cg.jpacrud.entities;
 
-
-
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.SequenceGenerator;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-@NamedQueries({
-	@NamedQuery(name = "getAllBooks",query = "SELECT author FROM Author author")})
 @Entity
-@Table(name="Author ")
-public class Author  implements Serializable {
+@Table(name = "Author_master")
+public class Author implements Serializable {
+
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="seq")
-	@SequenceGenerator(name="seq",sequenceName="seq_author_id",
-	allocationSize=1)
-	private int authorId;
-	private String firstName;
-	private String middleName;
-	private String lastName;
-	private String phoneNo;
+	private int id;
 
-	public int getAuthorId() {
-		return authorId;
+	private String name;
+
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(name = " Book_Author", joinColumns = { @JoinColumn(name = "Author_id") }, inverseJoinColumns = { @JoinColumn(name = "Book_id") })
+	private Set<Book> books = new HashSet<>(); // required to avoid
+												// NullPointerException
+
+	public int getId() {
+		return id;
 	}
-	public void setAuthorId(int authorId) {
-		this.authorId = authorId;
+
+	public void setId(int id) {
+		this.id = id;
 	}
-	public String getFirstName() {
-		return firstName;
+
+	public String getName() {
+		return name;
 	}
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+
+	public void setName(String name) {
+		this.name = name;
 	}
-	public String getMiddleName() {
-		return middleName;
+
+	public Set<Book> getBooks() {
+		return books;
 	}
-	public void setMiddleName(String middleName) {
-		this.middleName = middleName;
+
+	public void setBooks(Set<Book> books) {
+		this.books = books;
 	}
-	public String getLastName() {
-		return lastName;
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+
+	public void addBook(Book Book) {
+		this.getBooks().add(Book);
 	}
-	public String getPhoneNo() {
-		return phoneNo;
-	}
-	public void setPhoneNo(String phoneNo) {
-		this.phoneNo = phoneNo;
-	}
+
 	@Override
 	public String toString() {
-		return "Author [authorId=" + authorId + ", firstName=" + firstName
-				+ ", middleName=" + middleName + ", lastName=" + lastName
-				+ ", phoneNo=" + phoneNo + "]";
+		return "Author [id=" + id + ", name=" + name + "]";
 	}
-
-
 
 }
